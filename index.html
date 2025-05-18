@@ -45,11 +45,37 @@
         .gallery-item:hover {
             transform: scale(1.03);
         }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(255, 102, 179, 0.3);
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
+        
+        .call-btn {
+            background-color: #ff66b3;
+        }
+        
+        .service-tabs {
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
@@ -182,6 +208,16 @@
         </div>
     </div>
 
+    <!-- Floating Action Buttons -->
+    <div class="floating-btn flex flex-col space-y-3">
+        <a href="https://wa.me/8801711223344" class="whatsapp-btn w-14 h-14 rounded-full text-white flex items-center justify-center text-2xl">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+8801711223344" class="call-btn w-14 h-14 rounded-full text-white flex items-center justify-center text-2xl">
+            <i class="fas fa-phone"></i>
+        </a>
+    </div>
+
     <!-- Main Content -->
     <div id="homePage" class="container mx-auto px-4 py-8">
         <!-- Hero Section -->
@@ -190,10 +226,10 @@
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">আপনার সৌন্দর্য যাত্রার বিশ্বস্ত সঙ্গী</h1>
                 <p class="text-lg md:text-xl mb-6">বদলগাছী উপজেলার ঐতিহ্যবাহী ও রুচিশীল নারীদের জন্য বিশেষ সেবা</p>
                 <div class="flex flex-wrap gap-4">
-                    <button class="bg-white text-pink-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <button class="bg-white text-pink-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition" onclick="showServices()">
                         আমাদের সেবা দেখুন
                     </button>
-                    <button class="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:bg-opacity-10 transition">
+                    <button class="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:bg-opacity-10 transition" onclick="openSignupModal()">
                         সদস্য হোন
                     </button>
                 </div>
@@ -202,10 +238,28 @@
 
         <!-- Services Section -->
         <div class="mb-12">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের বিশেষ সেবাসমূহ</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">আমাদের বিশেষ সেবাসমূহ</h2>
+                <div class="hidden md:flex space-x-2">
+                    <button class="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm" onclick="filterServices('all')">সব</button>
+                    <button class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm" onclick="filterServices('hair')">চুল</button>
+                    <button class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm" onclick="filterServices('face')">মুখ</button>
+                    <button class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm" onclick="filterServices('body')">বডি</button>
+                </div>
+            </div>
+            
+            <div class="service-tabs mb-6 md:hidden">
+                <div class="flex overflow-x-auto pb-2">
+                    <button class="px-4 py-2 whitespace-nowrap tab-active" onclick="filterServices('all')">সব সেবা</button>
+                    <button class="px-4 py-2 whitespace-nowrap" onclick="filterServices('hair')">চুলের সেবা</button>
+                    <button class="px-4 py-2 whitespace-nowrap" onclick="filterServices('face')">মুখের সেবা</button>
+                    <button class="px-4 py-2 whitespace-nowrap" onclick="filterServices('body')">বডি সেবা</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="servicesContainer">
                 <!-- Service 1 -->
-                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="hair">
                     <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-cut text-pink-500 text-2xl"></i>
                     </div>
@@ -220,7 +274,7 @@
                 </div>
                 
                 <!-- Service 2 -->
-                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="face">
                     <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-spa text-pink-500 text-2xl"></i>
                     </div>
@@ -235,15 +289,60 @@
                 </div>
                 
                 <!-- Service 3 -->
-                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="face">
                     <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-paint-brush text-pink-500 text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2 text-gray-800">মেকআপ সেবা</h3>
-                    <p class="text-gray-600 mb-4">বিভিন্ন অনুষ্ঠানের জন্য বিশেষ মেকআপ সেবা। প্রোডাক্ট ব্যবহারে আমরা অত্যন্ত সতর্ক।</p>
+                    <p class="text-gray-600 mb-4">বিভিন্ন অনুষ্ঠানের জন্য বিশেষ মেকآপ সেবা। প্রোডাক্ট ব্যবহারে আমরা অত্যন্ত সতর্ক।</p>
                     <div class="flex justify-between items-center">
                         <span class="text-pink-500 font-bold">৳ ১০০০ - ৳ ৫০০০</span>
                         <button onclick="openOrderModal('মেকআপ সেবা')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="hair">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-fire text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">চুল স্ট্রেটেনিং</h3>
+                    <p class="text-gray-600 mb-4">প্রফেশনাল চুল স্ট্রেটেনিং সেবা যা আপনার চুলকে করবে মসৃণ ও ঝলমলে।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ১৫০০ - ৳ ৩৫০০</span>
+                        <button onclick="openOrderModal('চুল স্ট্রেটেনিং')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="body">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-hand-sparkles text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">ম্যানিকিউর ও পেডিকিউর</h3>
+                    <p class="text-gray-600 mb-4">আপনার হাত ও পায়ের নখের বিশেষ যত্ন। বিভিন্ন ডিজাইনের সুবিধা সহ।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ৪০০ - ৳ ১২০০</span>
+                        <button onclick="openOrderModal('ম্যানিকিউর ও পেডিকিউর')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300" data-category="body">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-spray-can text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">বডি স্পা</h3>
+                    <p class="text-gray-600 mb-4">সম্পূর্ণ শরীরের বিশেষ স্পা ট্রিটমেন্ট যা আপনাকে দেবে প্রশান্তির অনুভূতি।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ২০০০ - ৳ ৫০০০</span>
+                        <button onclick="openOrderModal('বডি স্পা')" class="text-pink-500 hover:text-pink-700 font-medium">
                             বুক করুন <i class="fas fa-arrow-right ml-1"></i>
                         </button>
                     </div>
@@ -256,15 +355,21 @@
             <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের প্রিমিয়াম পণ্য</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Product 1 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg relative">
                     <div class="h-48 bg-pink-100 flex items-center justify-center">
                         <img src="https://via.placeholder.com/300x300?text=Beauty+Product" alt="Beauty Product" class="h-full object-cover">
+                    </div>
+                    <div class="absolute top-2 left-2">
+                        <span class="bg-pink-500 text-white text-xs px-2 py-1 rounded-full">নতুন</span>
                     </div>
                     <div class="p-4">
                         <h3 class="font-bold text-lg mb-1 text-gray-800">প্রাকৃতিক ফেসওয়াশ</h3>
                         <p class="text-gray-600 text-sm mb-3">আলোয়ের ভেলায় ভেসে যাওয়া ত্বকের জন্য</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-pink-500 font-bold">৳ ৩৫০</span>
+                            <div>
+                                <span class="text-pink-500 font-bold">৳ ৩৫০</span>
+                                <span class="text-gray-400 text-sm line-through ml-2">৳ ৪০০</span>
+                            </div>
                             <button onclick="openOrderModal('প্রাকৃতিক ফেসওয়াশ')" class="text-pink-500 hover:text-pink-700">
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
@@ -273,9 +378,12 @@
                 </div>
                 
                 <!-- Product 2 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg relative">
                     <div class="h-48 bg-pink-100 flex items-center justify-center">
                         <img src="https://via.placeholder.com/300x300?text=Hair+Oil" alt="Hair Oil" class="h-full object-cover">
+                    </div>
+                    <div class="absolute top-2 left-2">
+                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">বেস্টসেলার</span>
                     </div>
                     <div class="p-4">
                         <h3 class="font-bold text-lg mb-1 text-gray-800">আমলকী হেয়ার অয়েল</h3>
@@ -320,6 +428,38 @@
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <button class="border border-pink-500 text-pink-500 px-6 py-2 rounded-md hover:bg-pink-500 hover:text-white transition">
+                    সব পণ্য দেখুন
+                </button>
+            </div>
+        </div>
+
+        <!-- Special Offers -->
+        <div class="mb-12 bg-pink-50 rounded-xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">বিশেষ অফার!</h2>
+                    <p class="text-gray-600 mb-4">এই মাসের বিশেষ অফারে পাচ্ছেন ২০% ডিসকাউন্ট। আমাদের নতুন স্পা ট্রিটমেন্ট ও ফেসিয়াল কম্বো প্যাকেজে বিশেষ মূল্যে।</p>
+                    <div class="flex items-center mb-4">
+                        <div class="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-medium mr-3">
+                            সীমিত সময়ের অফার
+                        </div>
+                        <div class="text-gray-500 text-sm">
+                            <i class="fas fa-clock mr-1"></i> শেষ হতে বাকি ৫ দিন
+                        </div>
+                    </div>
+                    <button onclick="openOrderModal('বিশেষ অফার')" class="bg-pink-500 text-white px-6 py-2 rounded-md hover:bg-pink-600 transition">
+                        এখনই বুক করুন
+                    </button>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <img src="https://via.placeholder.com/600x400?text=Special+Offer" alt="Special Offer" class="w-full rounded-lg">
                     </div>
                 </div>
             </div>
@@ -390,6 +530,18 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Newsletter -->
+        <div class="mb-12 bg-gradient-to-r from-pink-100 to-purple-100 rounded-xl p-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-gray-800">আমাদের নিউজলেটারে সাবস্ক্রাইব করুন</h2>
+            <p class="text-gray-600 mb-6">সর্বশেষ অফার ও টিপস পেতে আজই সাবস্ক্রাইব করুন</p>
+            <div class="max-w-md mx-auto flex">
+                <input type="email" placeholder="আপনার ইমেইল" class="flex-grow px-4 py-2 rounded-l-md border focus:outline-none focus:ring-2 focus:ring-pink-300">
+                <button class="bg-pink-500 text-white px-6 py-2 rounded-r-md hover:bg-pink-600 transition">
+                    সাবস্ক্রাইব
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Blog Page (Hidden by default) -->
@@ -438,7 +590,27 @@
                 <img src="https://via.placeholder.com/600x400?text=Makeup" alt="Makeup" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <h3 class="text-xl font-bold mb-2 text-gray-800">দৈনন্দিন মেকআপের সহজ টিপস</h3>
-                    <p class="text-gray-600 mb-4">কাজের ব্যস্ততার মাঝেও কীভাবে রাখবেন নিজেকে সতেজ ও সুন্দর? জেনে নিন দৈনন্দিন মেকআপের কিছু সহজ কৌশল...</p>
+                    <p class="text-gray-600 mb-4">কাজের ব্যস্ততার মাঝেও কীভাবে রাখবেন নিজেকে সতেজ ও সুন্দর? জেনে নিন দৈনন্দিন মেকآপের কিছু সহজ কৌশল...</p>
+                    <a href="#" class="text-pink-500 font-medium hover:underline">আরও পড়ুন</a>
+                </div>
+            </div>
+            
+            <!-- Blog 3 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/600x400?text=Natural+Remedies" alt="Natural Remedies" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">প্রাকৃতিক উপায়ে ত্বকের যত্ন</h3>
+                    <p class="text-gray-600 mb-4">রাসায়নিক মুক্ত উপায়ে ত্বকের যত্ন নিতে চান? জেনে নিন কিছু সহজ প্রাকৃতিক উপাদান যা আপনার ত্বককে করবে আরও সুন্দর...</p>
+                    <a href="#" class="text-pink-500 font-medium hover:underline">আরও পড়ুন</a>
+                </div>
+            </div>
+            
+            <!-- Blog 4 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/600x400?text=Hair+Style" alt="Hair Style" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">এই ঈদে ট্রেন্ডি হেয়ারস্টাইল</h3>
+                    <p class="text-gray-600 mb-4">এই ঈদে কী ধরনের হেয়ারস্টাইল রাখবেন? জেনে নিন এই মৌসুমের সবচেয়ে জনপ্রিয় হেয়ারস্টাইল ট্রেন্ডস...</p>
                     <a href="#" class="text-pink-500 font-medium hover:underline">আরও পড়ুন</a>
                 </div>
             </div>
@@ -510,7 +682,7 @@
             <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের সম্পর্কে</h2>
             
             <div class="mb-8">
-                <h3 class="text-xl font-bold mb-4 text-gray-800 text-pink-500">অপরুপা বিউটি পার্লার</h3>
+                <h3 class="text-xl font-bold mb-4 text-pink-500">অপরুপা বিউটি পার্লার</h3>
                 <p class="text-gray-600 mb-4">বদলগাছী উপজেলার ঐতিহ্যবাহী ও রুচিশীল নারীদের জন্য বিশ্বস্ত সৌন্দর্য সঙ্গী হিসেবে আমরা ২০১০ সাল থেকে সেবা প্রদান করে আসছি। আমাদের লক্ষ্য হলো নারীদের সৌন্দর্য চর্চাকে সহজ, সাশ্রয়ী ও আনন্দদায়ক করে তোলা।</p>
                 <p class="text-gray-600">আমাদের বিশেষজ্ঞ টিম সর্বদা আধুনিক ট্রেন্ড ও প্রযুক্তির সাথে তাল মিলিয়ে চলেন যাতে আপনাকে সর্বোচ্চ মানের সেবা প্রদান করতে পারি।</p>
             </div>
@@ -569,6 +741,10 @@
                         <p class="text-gray-600"><i class="fas fa-clock text-pink-500 mr-2"></i> শুক্রবার: বন্ধ</p>
                     </div>
                 </div>
+                
+                <div class="mt-6">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3631.123456789012!2d89.12345678901234!3d24.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA3JzI0LjQiTiA4OcKwMDcnMjQuNSJF!5e0!3m2!1sen!2sbd!4v1234567890123!5m2!1sen!2sbd" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" class="rounded-lg"></iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -626,6 +802,35 @@
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('hidden');
         }
+        
+        // Filter services
+        function filterServices(category) {
+            const services = document.querySelectorAll('.service-card');
+            const tabs = document.querySelectorAll('.service-tabs button');
+            
+            // Update active tab
+            tabs.forEach(tab => {
+                if (tab.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && tab.textContent.includes('সব'))) {
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('bg-gray-100', 'text-gray-600');
+                    tab.classList.add('bg-pink-100', 'text-pink-600');
+                } else {
+                    tab.classList.remove('tab-active');
+                    tab.classList.remove('bg-pink-100', 'text-pink-600');
+                    tab.classList.add('bg-gray-100', 'text-gray-600');
+                }
+            });
+            
+            // Show/hide services
+            services.forEach(service => {
+                if (category === 'all' || service.dataset.category === category) {
+                    service.style.display = 'block';
+                } else {
+                    service.style.display = 'none';
+                }
+            });
+        }
 
         // Show different pages
         function showHome() {
@@ -644,7 +849,7 @@
 
         function showProducts() {
             // Scroll to products section
-            const productsSection = document.querySelector('#homePage > div:nth-child(4)');
+            const productsSection = document.querySelector('#homePage > div:nth-child(5)');
             productsSection.scrollIntoView({ behavior: 'smooth' });
             toggleMobileMenu();
         }
@@ -767,6 +972,9 @@
             } else {
                 document.getElementById('logoutBtn').classList.add('hidden');
             }
+            
+            // Initialize service tabs
+            filterServices('all');
         };
 
         // Order submission
