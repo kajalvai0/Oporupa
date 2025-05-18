@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অপরুপা বিউটি পার্লার</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap');
+        
+        body {
+            font-family: 'Tiro Bangla', serif;
+            background-color: #fff9fb;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffcce6 0%, #ff99cc 50%, #ff66b3 100%);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.2);
+        }
+        
+        .login-modal, .order-modal {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #ff66b3;
+            color: #ff66b3;
+            font-weight: bold;
+        }
+        
+        .gallery-item {
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-spa text-3xl text-pink-500 mr-2"></i>
+                        <span class="font-semibold text-2xl text-gray-800">অপরুপা বিউটি পার্লার</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-800 hover:text-pink-500" onclick="showHome()">হোম</a>
+                    <a href="#" class="text-gray-800 hover:text-pink-500" onclick="showServices()">সেবাসমূহ</a>
+                    <a href="#" class="text-gray-800 hover:text-pink-500" onclick="showProducts()">পণ্য</a>
+                    <a href="#" class="text-gray-800 hover:text-pink-500" onclick="showBlog()">ব্লগ</a>
+                    <a href="#" class="text-gray-800 hover:text-pink-500" onclick="showAbout()">আমাদের সম্পর্কে</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="loginBtn" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition" onclick="openLoginModal()">
+                        লগইন
+                    </button>
+                    <button class="md:hidden text-gray-800" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white px-4 py-2 border-t">
+            <a href="#" class="block py-2 text-gray-800 hover:text-pink-500" onclick="showHome()">হোম</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-pink-500" onclick="showServices()">সেবাসমূহ</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-pink-500" onclick="showProducts()">পণ্য</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-pink-500" onclick="showBlog()">ব্লগ</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-pink-500" onclick="showAbout()">আমাদের সম্পর্কে</a>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="login-modal bg-white rounded-lg p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">লগইন করুন</h3>
+                <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">ইমেইল</label>
+                <input type="email" id="loginEmail" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">পাসওয়ার্ড</label>
+                <input type="password" id="loginPassword" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <button onclick="loginUser()" class="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition">
+                    লগইন
+                </button>
+            </div>
+            <div class="text-center">
+                <p class="text-gray-600">অ্যাকাউন্ট নেই? <a href="#" class="text-pink-500 hover:underline" onclick="showSignup()">সাইন আপ করুন</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="login-modal bg-white rounded-lg p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">সাইন আপ করুন</h3>
+                <button onclick="closeSignupModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">পূর্ণ নাম</label>
+                <input type="text" id="signupName" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">ইমেইল</label>
+                <input type="email" id="signupEmail" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">মোবাইল নম্বর</label>
+                <input type="tel" id="signupPhone" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">পাসওয়ার্ড</label>
+                <input type="password" id="signupPassword" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <button onclick="signupUser()" class="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition">
+                    সাইন আপ
+                </button>
+            </div>
+            <div class="text-center">
+                <p class="text-gray-600">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" class="text-pink-500 hover:underline" onclick="showLogin()">লগইন করুন</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="order-modal bg-white rounded-lg p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="orderTitle" class="text-xl font-bold text-gray-800">সেবা অর্ডার করুন</h3>
+                <button onclick="closeOrderModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">আপনার নাম</label>
+                <input type="text" id="orderName" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">মোবাইল নম্বর</label>
+                <input type="tel" id="orderPhone" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">ঠিকানা</label>
+                <textarea id="orderAddress" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300" rows="3"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">অতিরিক্ত বার্তা (যদি থাকে)</label>
+                <textarea id="orderMessage" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300" rows="3"></textarea>
+            </div>
+            <div class="mb-4">
+                <button onclick="submitOrder()" class="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition">
+                    অর্ডার সাবমিট করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="homePage" class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="hero-gradient rounded-xl p-8 md:p-12 mb-12 text-white">
+            <div class="max-w-2xl">
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">আপনার সৌন্দর্য যাত্রার বিশ্বস্ত সঙ্গী</h1>
+                <p class="text-lg md:text-xl mb-6">বদলগাছী উপজেলার ঐতিহ্যবাহী ও রুচিশীল নারীদের জন্য বিশেষ সেবা</p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-white text-pink-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                        আমাদের সেবা দেখুন
+                    </button>
+                    <button class="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:bg-opacity-10 transition">
+                        সদস্য হোন
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের বিশেষ সেবাসমূহ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-cut text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">চুল কাটা ও স্টাইলিং</h3>
+                    <p class="text-gray-600 mb-4">আধুনিক সব স্টাইলে আপনার চুল কাটা ও স্টাইলিং সেবা। বিশেষজ্ঞ স্টাইলিস্ট দ্বারা পরিচালিত।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ৩০০ - ৳ ১০০০</span>
+                        <button onclick="openOrderModal('চুল কাটা ও স্টাইলিং')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-spa text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">ফেসিয়াল ট্রিটমেন্ট</h3>
+                    <p class="text-gray-600 mb-4">প্রাকৃতিক উপাদানে তৈরি ফেসিয়াল যা আপনার ত্বককে করে তুলবে উজ্জ্বল ও প্রাণবন্ত।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ৫০০ - ৳ ১৫০০</span>
+                        <button onclick="openOrderModal('ফেসিয়াল ট্রিটমেন্ট')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-xl shadow-md p-6 transition duration-300">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-paint-brush text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">মেকআপ সেবা</h3>
+                    <p class="text-gray-600 mb-4">বিভিন্ন অনুষ্ঠানের জন্য বিশেষ মেকআপ সেবা। প্রোডাক্ট ব্যবহারে আমরা অত্যন্ত সতর্ক।</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-500 font-bold">৳ ১০০০ - ৳ ৫০০০</span>
+                        <button onclick="openOrderModal('মেকআপ সেবা')" class="text-pink-500 hover:text-pink-700 font-medium">
+                            বুক করুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের প্রিমিয়াম পণ্য</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                    <div class="h-48 bg-pink-100 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Beauty+Product" alt="Beauty Product" class="h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1 text-gray-800">প্রাকৃতিক ফেসওয়াশ</h3>
+                        <p class="text-gray-600 text-sm mb-3">আলোয়ের ভেলায় ভেসে যাওয়া ত্বকের জন্য</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-pink-500 font-bold">৳ ৩৫০</span>
+                            <button onclick="openOrderModal('প্রাকৃতিক ফেসওয়াশ')" class="text-pink-500 hover:text-pink-700">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                    <div class="h-48 bg-pink-100 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Hair+Oil" alt="Hair Oil" class="h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1 text-gray-800">আমলকী হেয়ার অয়েল</h3>
+                        <p class="text-gray-600 text-sm mb-3">চুল পড়া রোধ ও নতুন চুল গজাতে সহায়ক</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-pink-500 font-bold">৳ ২৮০</span>
+                            <button onclick="openOrderModal('আমলকী হেয়ার অয়েল')" class="text-pink-500 hover:text-pink-700">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                    <div class="h-48 bg-pink-100 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Body+Lotion" alt="Body Lotion" class="h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1 text-gray-800">শীতল বডি লোশন</h3>
+                        <p class="text-gray-600 text-sm mb-3">ত্বককে করে নরম ও কোমল</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-pink-500 font-bold">৳ ৪২০</span>
+                            <button onclick="openOrderModal('শীতল বডি লোশন')" class="text-pink-500 hover:text-pink-700">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                    <div class="h-48 bg-pink-100 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Face+Mask" alt="Face Mask" class="h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1 text-gray-800">মাল্টানী মাটি ফেস মাস্ক</h3>
+                        <p class="text-gray-600 text-sm mb-3">ত্বকের অতিরিক্ত তেল ও ময়লা দূর করে</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-pink-500 font-bold">৳ ২৫০</span>
+                            <button onclick="openOrderModal('মাল্টানী মাটি ফেস মাস্ক')" class="text-pink-500 hover:text-pink-700">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের গ্রাহকদের মতামত</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-pink-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">আফসানা আহমেদ</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"অপরুপা বিউটি পার্লারে আমার মেকআপ সার্ভিস নিয়েছিলাম। সত্যিই অসাধারণ কাজ করেছে তারা। সবাই প্রশংসা করেছিল।"</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-pink-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">নুসরাত জাহান</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"তাদের প্রাকৃতিক ফেসিয়াল সত্যিই চমৎকার। আমার ত্বক অনেক বেশি উজ্জ্বল ও প্রাণবন্ত হয়ে উঠেছে।"</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-pink-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">রুমানা ইসলাম</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"আমলকী হেয়ার অয়েল ব্যবহার করে আমার চুল পড়া অনেক কমে গেছে। এখন নতুন চুলও গজাচ্ছে। ধন্যবাদ অপরুপা বিউটি পার্লারকে।"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Page (Hidden by default) -->
+    <div id="blogPage" class="container mx-auto px-4 py-8 hidden">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">সদস্যদের জন্য বিশেষ ব্লগ</h2>
+            <button id="logoutBtn" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition hidden" onclick="logoutUser()">
+                লগআউট
+            </button>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="md:flex">
+                <div class="md:w-1/3">
+                    <img src="https://via.placeholder.com/600x400?text=Beauty+Tips" alt="Beauty Tips" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6 md:w-2/3">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">গরমে ত্বকের যত্নের বিশেষ টিপস</h3>
+                    <p class="text-gray-600 mb-4">গ্রীষ্মের এই গরমে ত্বক হয়ে উঠে শুষ্ক ও নিষ্প্রাণ। কীভাবে রাখবেন আপনার ত্বক সতেজ ও প্রাণবন্ত? জেনে নিন বিশেষজ্ঞদের পরামর্শ...</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mr-3">
+                            <i class="fas fa-user text-pink-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">ডাঃ নাজমা আহমেদ</p>
+                            <p class="text-xs text-gray-500">ডার্মাটোলজিস্ট</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Blog 1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/600x400?text=Hair+Care" alt="Hair Care" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">চুল পড়া রোধে করণীয়</h3>
+                    <p class="text-gray-600 mb-4">প্রতিদিন গোসলের সময় চুল পড়ে যাওয়া নিয়ে চিন্তিত? জেনে নিন কিছু সহজ ঘরোয়া উপায় যা চুল পড়া রোধে সাহায্য করবে...</p>
+                    <a href="#" class="text-pink-500 font-medium hover:underline">আরও পড়ুন</a>
+                </div>
+            </div>
+            
+            <!-- Blog 2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/600x400?text=Makeup" alt="Makeup" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">দৈনন্দিন মেকআপের সহজ টিপস</h3>
+                    <p class="text-gray-600 mb-4">কাজের ব্যস্ততার মাঝেও কীভাবে রাখবেন নিজেকে সতেজ ও সুন্দর? জেনে নিন দৈনন্দিন মেকআপের কিছু সহজ কৌশল...</p>
+                    <a href="#" class="text-pink-500 font-medium hover:underline">আরও পড়ুন</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audio Section -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">অডিও টিপস</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-medium mb-2 text-gray-800">ত্বকের যত্নে প্রাকৃতিক উপাদান</h4>
+                    <audio controls class="w-full mt-2">
+                        <source src="#" type="audio/mpeg">
+                        আপনার ব্রাউজার অডিও এলিমেন্ট সাপোর্ট করে না।
+                    </audio>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-medium mb-2 text-gray-800">চুলের স্বাস্থ্য রক্ষায় করণীয়</h4>
+                    <audio controls class="w-full mt-2">
+                        <source src="#" type="audio/mpeg">
+                        আপনার ব্রাউজার অডিও এলিমেন্ট সাপোর্ট করে না।
+                    </audio>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Section -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">ভিডিও টিউটোরিয়াল</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
+                        <img src="https://via.placeholder.com/600x400?text=Video+1" alt="Video 1" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-medium mt-2 text-gray-800">ঘরোয়া ফেসিয়াল তৈরির পদ্ধতি</h4>
+                </div>
+                <div>
+                    <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
+                        <img src="https://via.placeholder.com/600x400?text=Video+2" alt="Video 2" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-medium mt-2 text-gray-800">সহজ হেয়ার স্টাইলিং টিপস</h4>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gallery Section -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">ইমেজ গ্যালারি</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="gallery-item overflow-hidden rounded-lg">
+                    <img src="https://via.placeholder.com/300x300?text=Gallery+1" alt="Gallery 1" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg">
+                    <img src="https://via.placeholder.com/300x300?text=Gallery+2" alt="Gallery 2" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg">
+                    <img src="https://via.placeholder.com/300x300?text=Gallery+3" alt="Gallery 3" class="w-full h-full object-cover">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg">
+                    <img src="https://via.placeholder.com/300x300?text=Gallery+4" alt="Gallery 4" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page (Hidden by default) -->
+    <div id="aboutPage" class="container mx-auto px-4 py-8 hidden">
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">আমাদের সম্পর্কে</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 text-pink-500">অপরুপা বিউটি পার্লার</h3>
+                <p class="text-gray-600 mb-4">বদলগাছী উপজেলার ঐতিহ্যবাহী ও রুচিশীল নারীদের জন্য বিশ্বস্ত সৌন্দর্য সঙ্গী হিসেবে আমরা ২০১০ সাল থেকে সেবা প্রদান করে আসছি। আমাদের লক্ষ্য হলো নারীদের সৌন্দর্য চর্চাকে সহজ, সাশ্রয়ী ও আনন্দদায়ক করে তোলা।</p>
+                <p class="text-gray-600">আমাদের বিশেষজ্ঞ টিম সর্বদা আধুনিক ট্রেন্ড ও প্রযুক্তির সাথে তাল মিলিয়ে চলেন যাতে আপনাকে সর্বোচ্চ মানের সেবা প্রদান করতে পারি।</p>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">আমাদের মিশন</h3>
+                <p class="text-gray-600 mb-4">আমরা বিশ্বাস করি প্রতিটি নারীই অনন্য ও সুন্দর। আমাদের মিশন হলো প্রতিটি নারীকে তার নিজস্ব সৌন্দর্য উপলব্ধি করতে সাহায্য করা এবং তাকে আরও আত্মবিশ্বাসী করে তোলা।</p>
+                <p class="text-gray-600">আমরা প্রাকৃতিক ও নিরাপদ উপাদান ব্যবহারে বিশেষ গুরুত্ব দেই। আমাদের সকল সেবা ও পণ্য স্বাস্থ্যকর ও পরিবেশবান্ধব।</p>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">আমাদের টিম</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Team Member 1 -->
+                    <div class="bg-pink-50 rounded-lg p-4 text-center">
+                        <div class="w-24 h-24 rounded-full bg-pink-100 mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-user text-pink-500 text-3xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800">নাজমা আক্তার</h4>
+                        <p class="text-gray-600 text-sm">প্রধান স্টাইলিস্ট</p>
+                        <p class="text-gray-600 text-sm mt-2">১০+ বছর অভিজ্ঞতা</p>
+                    </div>
+                    
+                    <!-- Team Member 2 -->
+                    <div class="bg-pink-50 rounded-lg p-4 text-center">
+                        <div class="w-24 h-24 rounded-full bg-pink-100 mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-user text-pink-500 text-3xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800">রুমানা ইসলাম</h4>
+                        <p class="text-gray-600 text-sm">মেকআপ আর্টিস্ট</p>
+                        <p class="text-gray-600 text-sm mt-2">৭+ বছর অভিজ্ঞতা</p>
+                    </div>
+                    
+                    <!-- Team Member 3 -->
+                    <div class="bg-pink-50 rounded-lg p-4 text-center">
+                        <div class="w-24 h-24 rounded-full bg-pink-100 mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-user text-pink-500 text-3xl"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800">ফারজানা ইয়াসমিন</h4>
+                        <p class="text-gray-600 text-sm">স্কিন কেয়ার বিশেষজ্ঞ</p>
+                        <p class="text-gray-600 text-sm mt-2">৫+ বছর অভিজ্ঞতা</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-gray-800">যোগাযোগ</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt text-pink-500 mr-2"></i> ১২৩ বিউটি স্ট্রিট, বদলগাছী, নাটোর</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-phone text-pink-500 mr-2"></i> +৮৮০ ১৭১১ ২২৩৩৪৪</p>
+                        <p class="text-gray-600"><i class="fas fa-envelope text-pink-500 mr-2"></i> info@oporupa-beauty.com</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-clock text-pink-500 mr-2"></i> শনি-বৃহস্পতিবার: সকাল ১০টা - রাত ৮টা</p>
+                        <p class="text-gray-600"><i class="fas fa-clock text-pink-500 mr-2"></i> শুক্রবার: বন্ধ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">অপরুপা বিউটি পার্লার</h3>
+                    <p class="text-gray-400">বদলগাছী উপজেলার ঐতিহ্যবাহী ও রুচিশীল নারীদের জন্য বিশ্বস্ত সৌন্দর্য সঙ্গী।</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">লিংক</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showHome()">হোম</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showServices()">সেবাসমূহ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showProducts()">পণ্য</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showBlog()">ব্লগ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showAbout()">আমাদের সম্পর্কে</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">যোগাযোগ</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> ১২৩ বিউটি স্ট্রিট, বদলগাছী</li>
+                        <li><i class="fas fa-phone mr-2"></i> +৮৮০ ১৭১১ ২২৩৩৪৪</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@oporupa-beauty.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">সামাজিক যোগাযোগ</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-pink-500">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-pink-500">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-pink-500">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; ২০২৩ অপরুপা বিউটি পার্লার। সকল স্বত্ব সংরক্ষিত।</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Show different pages
+        function showHome() {
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('blogPage').classList.add('hidden');
+            document.getElementById('aboutPage').classList.add('hidden');
+            toggleMobileMenu();
+        }
+
+        function showServices() {
+            // Scroll to services section
+            const servicesSection = document.querySelector('#homePage > div:nth-child(3)');
+            servicesSection.scrollIntoView({ behavior: 'smooth' });
+            toggleMobileMenu();
+        }
+
+        function showProducts() {
+            // Scroll to products section
+            const productsSection = document.querySelector('#homePage > div:nth-child(4)');
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+            toggleMobileMenu();
+        }
+
+        function showBlog() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                document.getElementById('homePage').classList.add('hidden');
+                document.getElementById('blogPage').classList.remove('hidden');
+                document.getElementById('aboutPage').classList.add('hidden');
+                document.getElementById('logoutBtn').classList.remove('hidden');
+                document.getElementById('loginBtn').classList.add('hidden');
+            } else {
+                alert('ব্লগ পেজ দেখতে আপনাকে লগইন করতে হবে।');
+                openLoginModal();
+            }
+            toggleMobileMenu();
+        }
+
+        function showAbout() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('blogPage').classList.add('hidden');
+            document.getElementById('aboutPage').classList.remove('hidden');
+            toggleMobileMenu();
+        }
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function openSignupModal() {
+            document.getElementById('signupModal').classList.remove('hidden');
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signupModal').classList.add('hidden');
+        }
+
+        function showSignup() {
+            closeLoginModal();
+            openSignupModal();
+        }
+
+        function showLogin() {
+            closeSignupModal();
+            openLoginModal();
+        }
+
+        function openOrderModal(serviceName) {
+            document.getElementById('orderTitle').textContent = serviceName + ' অর্ডার করুন';
+            document.getElementById('orderModal').classList.remove('hidden');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+        }
+
+        // User authentication
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                // Simple validation
+                if (email.includes('@') && password.length >= 6) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    closeLoginModal();
+                    alert('সফলভাবে লগইন করা হয়েছে!');
+                    document.getElementById('loginBtn').classList.add('hidden');
+                } else {
+                    alert('দয়া করে একটি বৈধ ইমেইল ও পাসওয়ার্ড প্রদান করুন (পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে)।');
+                }
+            } else {
+                alert('দয়া করে ইমেইল ও পাসওয়ার্ড প্রদান করুন।');
+            }
+        }
+
+        function signupUser() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            if (name && email && phone && password) {
+                // Simple validation
+                if (email.includes('@') && phone.length >= 11 && password.length >= 6) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    closeSignupModal();
+                    alert('সফলভাবে সাইন আপ করা হয়েছে! এখন আপনি লগইন অবস্থায় আছেন।');
+                    document.getElementById('loginBtn').classList.add('hidden');
+                } else {
+                    alert('দয়া করে সমস্ত তথ্য সঠিকভাবে প্রদান করুন (ইমেইল বৈধ হতে হবে, মোবাইল নম্বর কমপক্ষে ১১ ডিজিটের এবং পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে)।');
+                }
+            } else {
+                alert('দয়া করে সমস্ত তথ্য প্রদান করুন।');
+            }
+        }
+
+        function logoutUser() {
+            localStorage.setItem('isLoggedIn', 'false');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('loginBtn').classList.remove('hidden');
+            showHome();
+            alert('সফলভাবে লগআউট করা হয়েছে।');
+        }
+
+        // Check if user is logged in when page loads
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                document.getElementById('loginBtn').classList.add('hidden');
+            } else {
+                document.getElementById('logoutBtn').classList.add('hidden');
+            }
+        };
+
+        // Order submission
+        function submitOrder() {
+            const serviceName = document.getElementById('orderTitle').textContent.replace(' অর্ডার করুন', '');
+            const name = document.getElementById('orderName').value;
+            const phone = document.getElementById('orderPhone').value;
+            const address = document.getElementById('orderAddress').value;
+            const message = document.getElementById('orderMessage').value;
+            
+            if (name && phone && address) {
+                // Here you would typically send this data to a server
+                console.log('Order submitted:', {
+                    serviceName,
+                    name,
+                    phone,
+                    address,
+                    message
+                });
+                
+                closeOrderModal();
+                alert('ধন্যবাদ! আপনার অর্ডারটি সফলভাবে জমা হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।');
+                
+                // Clear form
+                document.getElementById('orderName').value = '';
+                document.getElementById('orderPhone').value = '';
+                document.getElementById('orderAddress').value = '';
+                document.getElementById('orderMessage').value = '';
+            } else {
+                alert('দয়া করে নাম, মোবাইল নম্বর ও ঠিকানা প্রদান করুন।');
+            }
+        }
+    </script>
+</body>
+</html>
